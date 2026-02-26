@@ -1,0 +1,39 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Results: {{ question.question_text }} | PollSite{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <a href="{% url 'polls:index' %}" class="back-link">← Back to polls</a>
+    <h1 class="page-title">Results</h1>
+    <p class="page-subtitle">{{ question.question_text }}</p>
+</div>
+
+<div class="results-container">
+    {% with total=question.choice_set.all %}
+    <div class="results-list">
+        {% for choice in question.choice_set.all %}
+        <div class="result-item">
+            <div class="result-header">
+                <span class="result-choice">{{ choice.choice_text }}</span>
+                <span class="result-votes">{{ choice.votes }} vote{{ choice.votes|pluralize }}</span>
+            </div>
+            <div class="result-bar-bg">
+                <div class="result-bar"
+                    style="width: {% widthratio choice.votes question.choice_set.all|length 100 %}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endwith %}
+
+    <div class="results-actions">
+        <a href="{% url 'polls:detail' question.id %}" class="vote-again-btn">
+            Vote Again 🔄
+        </a>
+        <a href="{% url 'polls:index' %}" class="all-polls-btn">
+            All Polls →
+        </a>
+    </div>
+</div>
+{% endblock %}

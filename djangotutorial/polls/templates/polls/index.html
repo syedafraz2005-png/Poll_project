@@ -1,0 +1,37 @@
+{% extends "polls/base.html" %}
+
+{% block title %}All Polls | PollSite{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <h1 class="page-title">Active Polls</h1>
+    <p class="page-subtitle">Choose a question and cast your vote!</p>
+</div>
+
+<div class="polls-container">
+    {% if latest_question_list %}
+    <ul class="polls-list">
+        {% for question in latest_question_list %}
+        <li class="poll-card">
+            <a href="{% url 'polls:detail' question.id %}" class="poll-link">
+                <div class="poll-card-inner">
+                    <div class="poll-icon">🗳️</div>
+                    <div class="poll-info">
+                        <span class="poll-question">{{ question.question_text }}</span>
+                        <span class="poll-date">Published: {{ question.pub_date|date:"F j, Y" }}</span>
+                    </div>
+                    <div class="poll-arrow">→</div>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h2>No polls available</h2>
+        <p>Check back later — new polls are added regularly.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

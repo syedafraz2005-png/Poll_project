@@ -1,0 +1,35 @@
+{% extends "polls/base.html" %}
+
+{% block title %}{{ question.question_text }} | PollSite{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <a href="{% url 'polls:index' %}" class="back-link">← Back to polls</a>
+    <h1 class="page-title">{{ question.question_text }}</h1>
+</div>
+
+<div class="vote-container">
+    {% if error_message %}
+    <div class="alert alert-error">
+        <span>⚠️</span> {{ error_message }}
+    </div>
+    {% endif %}
+
+    <form action="{% url 'polls:vote' question.id %}" method="post" class="vote-form">
+        {% csrf_token %}
+        <div class="choices-list">
+            {% for choice in question.choice_set.all %}
+            <label class="choice-item">
+                <input class="choice-radio" type="radio" name="choice" id="choice{{ forloop.counter }}"
+                    value="{{ choice.id }}">
+                <span class="choice-label">{{ choice.choice_text }}</span>
+                <span class="choice-check">✓</span>
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="vote-btn">
+            Cast Your Vote 🗳️
+        </button>
+    </form>
+</div>
+{% endblock %}
